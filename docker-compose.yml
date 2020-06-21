@@ -1,0 +1,48 @@
+version: '3'
+services:
+
+  #PHP Service
+  drink-api:
+    build: .docker/php
+    container_name: drink-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      XDEBUG_CONFIG: "remote_host=172.17.0.1 remote_enable=1"
+      SERVICE_NAME: drink-api
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - .docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - drink-app-network
+
+  #MySQL Service
+  db-drink:
+    image: mysql:5.7.22
+    container_name: db-drink
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "33006:3306"
+    environment:
+      MYSQL_DATABASE: drinker
+      MYSQL_ROOT_PASSWORD: 123456
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - drink-app-network
+
+#Docker Networks
+networks:
+  drink-app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
