@@ -8,4 +8,3 @@ Primeros passos:
 
 - O arquivo .env contem os dados de acesso ao banco.
 - Na raiz do projeto se encontra o arquivo .sql com os codigos das tabelas usadas.
-- Foi utilizado exclusão lógica nos usuários.
